@@ -1,0 +1,10 @@
+
+
+HOMEPAGE="http://mypaint.intilinux.com/"
+SRC_URI="http://download.gna.org/mypaint/${P}.tar.bz2"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	scons
+}
