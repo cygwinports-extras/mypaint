@@ -1,0 +1,7 @@
+category: Graphics
+requires: libgcc1 libglib2.0_0 libpng14 libstdc++6 python python-cairo python-gobject python-gtk2.0 python-numpy
+sdesc: "Painting application with minimal interface"
+ldesc: "MyPaint is a fast and easy open-source graphics application for 
+digital painters. It lets you focus on the art instead of the program. 
+You work on your canvas with minimum distractions, bringing up the 
+interface only when you need it."
