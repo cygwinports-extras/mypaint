@@ -1,0 +1,25 @@
+inherit python
+
+NAME="mypaint"
+VERSION=1.0.0
+RELEASE=2
+CATEGORY="Graphics"
+SUMMARY="Painting application with minimal interface"
+DESCRIPTION="MyPaint is a fast and easy open-source graphics application for
+digital painters. It lets you focus on the art instead of the program. You work
+on your canvas with minimum distractions, bringing up the interface only when
+you need it."
+HOMEPAGE="http://mypaint.intilinux.com/"
+SRC_URI="http://download.gna.org/mypaint/${P}.tar.bz2"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	scons || error "Scons compile failed"
+}
+
+src_install() {
+	cd ${B}
+	scons install prefix=${D}/usr || error "Scons install failed"
+	python_optimize /usr/share/${PN}
+}
