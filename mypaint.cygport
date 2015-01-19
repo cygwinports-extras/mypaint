@@ -2,7 +2,7 @@ inherit python
 
 NAME="mypaint"
 VERSION=1.1.0
-RELEASE=1
+RELEASE=2
 CATEGORY="Graphics"
 SUMMARY="Painting application with minimal interface"
 DESCRIPTION="MyPaint is a fast and easy open-source graphics application for
@@ -24,4 +24,8 @@ src_install() {
 	cd ${B}
 	scons install prefix=${D}/usr || error "Scons install failed"
 	python_optimize /usr/share/${PN}
+
+	pushd ${D}/usr
+	rm -fr include/ lib/lib*.a lib/mypaint/*.a lib/pkgconfig/*
+	popd
 }
