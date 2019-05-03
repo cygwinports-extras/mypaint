@@ -1,0 +1,22 @@
+--- origsrc/mypaint-1.2.1/SConstruct	2017-01-21 12:51:52.000000000 -0500
++++ src/mypaint-1.2.1/SConstruct	2019-05-02 21:30:09.204319400 -0400
+@@ -122,6 +122,8 @@ if env['enable_profiling'] or env['debug
+ 
+ if sys.platform == "darwin":
+     pass
++elif sys.platform == "cygwin":
++    pass
+ elif sys.platform == "win32":
+     pass
+ elif sys.platform == "msys" and os.environ.get("MSYSTEM") != "MSYS":
+--- origsrc/mypaint-1.2.1/brushlib/tests/SConscript	2017-01-21 12:51:52.000000000 -0500
++++ src/mypaint-1.2.1/brushlib/tests/SConscript	2019-05-02 21:28:42.302224400 -0400
+@@ -15,7 +15,7 @@ tests_sources = [fn for fn in os.listdir
+ testlib_sources = [fn for fn in os.listdir("./") if not is_test(fn) and is_csource(fn)]
+ 
+ testlib_env.Append(LIBS=['mypaint'])
+-if sys.platform == 'win32':
++if sys.platform == 'win32' or sys.platform == 'cygwin':
+     testlib_env.Append(LIBS=['intl'])
+ elif sys.platform == "msys" and os.environ.get("MSYSTEM") != "MSYS":
+     testlib_env.Append(LIBS=['intl'])

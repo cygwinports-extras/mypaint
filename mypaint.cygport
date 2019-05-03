@@ -1,29 +1,56 @@
-inherit python
+inherit python2
 
 NAME="mypaint"
-VERSION=1.1.0
-RELEASE=2
+VERSION=1.2.1
+RELEASE=1
 CATEGORY="Graphics"
 SUMMARY="Painting application with minimal interface"
 DESCRIPTION="MyPaint is a fast and easy open-source graphics application for
 digital painters. It lets you focus on the art instead of the program. You work
 on your canvas with minimum distractions, bringing up the interface only when
 you need it."
-HOMEPAGE="http://mypaint.intilinux.com/"
-SRC_URI="http://download.gna.org/mypaint/${P}.tar.bz2"
-PATCH_URI="1.1.0-cygwin.patch"
+HOMEPAGE="http://mypaint.org/"
+SRC_URI="https://github.com/mypaint/mypaint/releases/download/v${VERSION}/mypaint-${VERSION}.tar.xz"
+PATCH_URI="1.2.1-cygwin.patch"
+
+PKG_NAMES="${NAME} ${NAME}-ora-thumbnailer"
+mypaint_REQUIRES="python2-gi python2-gobject python-gtk2.0 python2-numpy girepository-Gtk3.0 libmypaint-common mypaint-brushes"
+mypaint_CONTENTS="
+	etc/postinstall/${NAME}.sh
+	usr/bin/mypaint
+	usr/lib/mypaint/
+	usr/share/appdata/mypaint.appdata.xml
+	usr/share/applications/mypaint.desktop
+	usr/share/doc/${NAME}
+	usr/share/icons/hicolor/*/*/mypaint*
+	usr/share/libmypaint/
+	usr/share/locale/*/*/mypaint.mo
+	usr/share/mypaint/
+"
+mypaint_ora_thumbnailer_SUMMARY="OpenRaster desktop thumbnailer"
+mypaint_ora_thumbnailer_REQUIRES="girepository-GdkPixbuf2.0"
+mypaint_ora_thumbnailer_CONTENTS="
+	usr/bin/mypaint-ora-thumbnailer
+	usr/share/thumbnailers/mypaint-ora.thumbnailer
+"
 
 src_compile() {
 	lndirs
 	cd ${B}
-	scons brushlib/mypaint-config.h || error "Scons configure failed"
+#	scons brushlib/mypaint-config.h || error "Scons configure failed"
 	scons || error "Scons compile failed"
 }
 
 src_install() {
 	cd ${B}
 	scons install prefix=${D}/usr || error "Scons install failed"
-	python_optimize /usr/share/${PN}
+	python2_optimize /usr/share/mypaint /usr/share/libmypaint
+
+	# use standalone mypaint-brushes
+	find ${D}/usr/share/mypaint/brushes -delete
+	dosym /usr/share/mypaint-data/1.0/brushes /usr/share/mypaint/brushes
+	# conflicts with standalone libmypaint
+	find ${D}/usr/share/locale -name libmypaint.mo -delete
 
 	pushd ${D}/usr
 	rm -fr include/ lib/lib*.a lib/mypaint/*.a lib/pkgconfig/*
